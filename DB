@@ -1,0 +1,67 @@
+pragma solidity >=0.7.0;
+ 
+contract User {
+    string login;
+    string password;
+     
+    constructor(string memory _login, string memory _password){
+        login = _login;
+        password = _password;
+    }
+    address private owner;
+     
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+    function setuser () private {
+        owner = msg.sender;
+    }
+}
+ 
+contract Database {
+     
+    // Базой данных может управлять только создатель
+    address private owner;
+     
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+    function database () private {
+        owner = msg.sender;
+    }
+     
+    // Работаем с адрессами
+    address[] private usersAddress;
+     
+    function getUsers(uint id) public view returns(address){
+        return usersAddress[id];
+    }
+     
+    function pushUser(address userAddress) public{
+        usersAddress.push(userAddress);
+    }
+     
+    function checkIn(address add) public view returns(bool){
+        for(uint i = 0; i <= usersAddress.length; i++){
+            if(usersAddress[i] == add){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+contract NewDatabase {
+     
+    address private owner;
+     
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+    function Newdatabase () private {
+        owner = msg.sender;
+    }
+    
+    }
