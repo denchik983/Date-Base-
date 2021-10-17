@@ -1,49 +1,43 @@
 pragma solidity >=0.7.0;
  
 contract User {
+    uint id;
     string login;
     string password;
-     
-    constructor(string memory _login, string memory _password){
+    address owner;
+    constructor(string memory _login, string memory _password , uint Id){
         login = _login;
         password = _password;
+        uint Id;
     }
-    address private owner;
-     
-    modifier onlyOwner() {
+   function getpassword() public view returns(string memory){
+       require(msg.sender == owner);
+        return password;
+    }
+    function getlogin() public view returns(string memory){
         require(msg.sender == owner);
-        _;
+        return login;
     }
-    function setuser () private {
-        owner = msg.sender;
-    }
+
 }
  
 contract Database {
      
-    // Базой данных может управлять только создатель
-    address private owner;
-     
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
-    function database () private {
-        owner = msg.sender;
-    }
-     
-    // Работаем с адрессами
     address[] private usersAddress;
-     
+    address owner;
     function getUsers(uint id) public view returns(address){
+        require(msg.sender == owner);
         return usersAddress[id];
     }
      
     function pushUser(address userAddress) public{
+         require(msg.sender == owner);
         usersAddress.push(userAddress);
+        
     }
      
     function checkIn(address add) public view returns(bool){
+        require(msg.sender == owner);
         for(uint i = 0; i <= usersAddress.length; i++){
             if(usersAddress[i] == add){
                 return true;
@@ -51,17 +45,16 @@ contract Database {
         }
         return false;
     }
-}
-contract NewDatabase {
-     
-    address private owner;
-     
-    modifier onlyOwner() {
+    function pushAddr(address en_addr) public {
         require(msg.sender == owner);
-        _;
+        usersAddress.push(en_addr);
     }
-    function Newdatabase () private {
-        owner = msg.sender;
+    function createUser (string memory login, string memory password, uint Id) public {
+      require(msg.sender == owner);
+      User tmp = new User( login, password, Id);
+      pushAddr(address(tmp));
+      Id = usersAddress.pushAddr(address(login, password)) ;
+      new User(Id, login, password);
     }
-    
-    }
+
+}
