@@ -27,6 +27,8 @@ contract Database {
     address[] private usersAddress;
     address owner;
     
+    constructor(){owner = msg.sender;}
+    
     function getUsers(uint id) public view returns(address){
         require(msg.sender == owner);
         return usersAddress[id];
@@ -48,18 +50,13 @@ contract Database {
         return false;
     }
     
-    // function pushAddr(address en_addr) public {
-    //     require(msg.sender == owner);
-    //     usersAddress.push(en_addr);
-    // }
-    
     function createUser (string memory login, string memory password) public payable{
       require(msg.sender == owner);
       User tmp = new User(login, password);
       pushUser(address(tmp));
     }
     
-    // function getLenght() returns(uint)
+    function getLenght() public view returns(uint) {return usersAddress.length;}
 
 }
 
@@ -67,7 +64,13 @@ contract Database {
 contract CreateDatabase{
     address[] private databaseAddress;
     
-    // function createDatabase() public returns(uint)
-    // function getDatabase(int id) returns(address)
+     function createDatabase() public payable returns(uint) {
+         Database BD = new Database (); 
+         databaseAddress.push (address(BD));
+         return databaseAddress.length -1;
+     }
+     function getDatabase(uint id) public view returns(address) {
+         return databaseAddress [id];
+     }
 
 }
