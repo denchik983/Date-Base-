@@ -5,10 +5,10 @@ contract User {
     string password;
     address owner;
     
-    constructor(string memory _login, string memory _password){
+    constructor(string memory _login, string memory _password, address _owner){
         login = _login;
         password = _password;
-        owner = msg.sender;
+        owner = _owner;
     }
     
    function getpassword() public view returns(string memory){
@@ -27,7 +27,10 @@ contract Database {
     address[] private usersAddress;
     address owner;
     
-    constructor(){owner = msg.sender;}
+    constructor(address _owner){
+        owner = _owner;
+        
+    }
     
     function getUsers(uint id) public view returns(address){
         require(msg.sender == owner);
@@ -50,10 +53,11 @@ contract Database {
         return false;
     }
     
-    function createUser (string memory login, string memory password) public payable{
+    function createUser (string memory login, string memory password, address polzovatel) public payable returns(uint){
       require(msg.sender == owner);
-      User tmp = new User(login, password);
+      User tmp = new User(login, password, polzovatel);
       pushUser(address(tmp));
+      return usersAddress.length -1;
     }
     
     function getLenght() public view returns(uint) {return usersAddress.length;}
@@ -65,7 +69,7 @@ contract CreateDatabase{
     address[] private databaseAddress;
     
      function createDatabase() public payable returns(uint) {
-         Database BD = new Database (); 
+         Database BD = new Database (msg.sender); 
          databaseAddress.push (address(BD));
          return databaseAddress.length -1;
      }
