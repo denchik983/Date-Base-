@@ -1,5 +1,5 @@
-pragma solidity >=0.7.0;
- 
+pragma solidity>=0.7.0;
+
 contract User {
     string login;
     string password;
@@ -12,14 +12,12 @@ contract User {
     }
     
    function getpassword() public view returns(string memory){
-       require(msg.sender == owner);
         return password;
     }
+
     function getlogin() public view returns(string memory){
-        require(msg.sender == owner);
         return login;
     }
-
 }
  
 contract Database {
@@ -32,19 +30,18 @@ contract Database {
         
     }
     
-    function getUsers(uint id) public view returns(address){
-        require(msg.sender == owner);
+    function getUsers(uint id, address sender) public view returns(address){
+        require(sender == owner);
         return usersAddress[id];
     }
      
-    function pushUser(address userAddress) public{
-        require(msg.sender == owner);
+    function pushUser(address userAddress, address sender) public{
+        require(sender == owner);
         usersAddress.push(userAddress);
-        
     }
      
-    function checkIn(address add) public view returns(bool){
-        require(msg.sender == owner);
+    function checkIn(address add, address sender) public view returns(bool){
+        require(sender == owner);
         for(uint i = 0; i < usersAddress.length; i++){
             if(usersAddress[i] == add){
                 return true;
@@ -53,15 +50,14 @@ contract Database {
         return false;
     }
     
-    function createUser (string memory login, string memory password, address polzovatel) public payable returns(uint){
-      require(msg.sender == owner);
-      User tmp = new User(login, password, polzovatel);
-      pushUser(address(tmp));
+    function createUser (string memory login, string memory password, address sender) public payable returns(uint){
+      require(sender == owner);
+      User tmp = new User(login, password, sender);
+      pushUser(address(tmp), sender);
       return usersAddress.length -1;
     }
     
     function getLenght() public view returns(uint) {return usersAddress.length;}
-
 }
 
 
@@ -77,4 +73,21 @@ contract CreateDatabase{
          return databaseAddress [id];
      }
 
+
+     // костыли
+    function getLainDatabase(uint id) public view returns(uint){
+        Database database = Database(getDatabase(id));
+        return database.getLenght();
+    }
+    function getLoginDatabase(uint idDatabase, uint idUser) public view returns(string memory){
+        Database database = Database(getDatabase(idDatabase));
+        User user = User(database.getUsers(idUser, msg.sender));
+        return user.getlogin();
+    }
+    function getPasswordDatabase(uint idDatabase, uint idUser) public view returns(string memory){
+        Database database = Database(getDatabase(idDatabase));
+        User user = User(database.getUsers(idUser, msg.sender));
+        return user.getpassword();
+    }
+    function createUser()
 }
