@@ -57,7 +57,9 @@ contract Database {
       return usersAddress.length -1;
     }
     
-    function getLenght() public view returns(uint) {return usersAddress.length;}
+    function getLenght() public view returns(uint) {
+        return usersAddress.length;
+    }
 }
 
 
@@ -89,5 +91,7 @@ contract CreateDatabase{
         User user = User(database.getUsers(idUser, msg.sender));
         return user.getpassword();
     }
-    function createUser()
+    function createUserDatabase(uint idDatabase, uint idUser) public payable returns(uint){
+    Database database = Database(getDatabase(idDatabase));    
+    }
 }
