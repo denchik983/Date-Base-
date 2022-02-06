@@ -91,7 +91,8 @@ contract CreateDatabase{
         User user = User(database.getUsers(idUser, msg.sender));
         return user.getpassword();
     }
-    function createUserDatabase(uint idDatabase, uint idUser) public payable returns(uint){
-    Database database = Database(getDatabase(idDatabase));    
+    function createUserDatabase(uint idDatabase, string memory login, string memory password) public payable returns(uint){
+    Database database = Database(getDatabase(idDatabase));   
+    return database.createUser(login, password, msg.sender);
     }
 }
