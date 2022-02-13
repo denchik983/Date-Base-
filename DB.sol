@@ -95,4 +95,8 @@ contract CreateDatabase{
     Database database = Database(getDatabase(idDatabase));   
     return database.createUser(login, password, msg.sender);
     }
+    function getUsersDatabase(uint idUser, address sender, uint idDatabase) public view returns(address){
+    Database database = Database(getDatabase(idDatabase));  
+    return database.getUsers(address, msg.sender);
+    }
 }
