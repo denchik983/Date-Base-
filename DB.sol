@@ -1,3 +1,4 @@
+
 pragma solidity>=0.7.0;
 
 contract User {
@@ -95,8 +96,8 @@ contract CreateDatabase{
     Database database = Database(getDatabase(idDatabase));   
     return database.createUser(login, password, msg.sender);
     }
-    function getUsersDatabase(uint idUser, address sender, uint idDatabase) public view returns(address){
+    function getUsersDatabase(uint idUser,  uint idDatabase) public view returns(address){
     Database database = Database(getDatabase(idDatabase));  
-    return database.getUsers(address, msg.sender);
+    return database.getUsers(idUser, msg.sender);
     }
 }
