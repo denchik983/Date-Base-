@@ -67,10 +67,9 @@ contract Database {
 contract CreateDatabase{
     address[] private databaseAddress;
     
-     function createDatabase() public payable returns(uint) {
+     function createDatabase() public payable {
          Database BD = new Database (msg.sender); 
          databaseAddress.push (address(BD));
-         return databaseAddress.length -1;
      }
      function getDatabase(uint id) public view returns(address) {
          return databaseAddress [id];
@@ -82,6 +81,9 @@ contract CreateDatabase{
         Database database = Database(getDatabase(id));
         return database.getLenght();
     }
+    function getCount() public view returns(uint){
+        return databaseAddress.length;
+    }
     function getLoginDatabase(uint idDatabase, uint idUser) public view returns(string memory){
         Database database = Database(getDatabase(idDatabase));
         User user = User(database.getUsers(idUser, msg.sender));
@@ -92,9 +94,9 @@ contract CreateDatabase{
         User user = User(database.getUsers(idUser, msg.sender));
         return user.getpassword();
     }
-    function createUserDatabase(uint idDatabase, string memory login, string memory password) public payable returns(uint){
+    function createUserDatabase(uint idDatabase, string memory login, string memory password) public payable{
     Database database = Database(getDatabase(idDatabase));   
-    return database.createUser(login, password, msg.sender);
+    database.createUser(login, password, msg.sender);
     }
     function getUsersDatabase(uint idUser,  uint idDatabase) public view returns(address){
     Database database = Database(getDatabase(idDatabase));  
